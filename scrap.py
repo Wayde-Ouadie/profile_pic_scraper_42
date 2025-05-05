@@ -10,7 +10,7 @@ usernames = [
 ]
 
 cookies = {
-    "_intra_42_session_production": "27694129c1f674747bdc12423a48bd9c" # 7AT HNA _intra_42_session_production jibo mn l cookies dl intra
+    "_intra_42_session_production": "88cd80ed5dfba950f9fea493f332f0c6" # 7AT HNA _intra_42_session_production jibo mn l cookies dl intra
 }
 
 for username in usernames:
