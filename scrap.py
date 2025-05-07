@@ -1,5 +1,12 @@
 import requests
 import json
+import sys
+
+if (len(sys.argv) < 2:
+   print("Usage: python3 scrap.py <_intra_42_session_production>")
+	sys.exit(1)
+
+session_token = sys.argv[1]
 
 usernames = [
  "ahari","mamal","nrais","ahmima","azahid","irabhi","nlotfi","otouba","safifi","sasbai","souali","yrafai","aanbadi","amahdad",
@@ -10,25 +17,24 @@ usernames = [
 ]
 
 cookies = {
-    "_intra_42_session_production": "88cd80ed5dfba950f9fea493f332f0c6" # 7AT HNA _intra_42_session_production jibo mn l cookies dl intra
+	"_intra_42_session_production": session_token
 }
 
 for username in usernames:
-    url = f"https://profile.intra.42.fr/users/{username}"
+	url = f"https://profile.intra.42.fr/users/{username}"
+	response = requests.get(url, cookies=cookies, allow_redirects=True)
 
-    response = requests.get(url, cookies=cookies, allow_redirects=True)
-
-    if response.status_code == 200:
-        data = json.loads(response.text)
-
-        image_url = data['image']['link']
-
-        img_data = requests.get(image_url).content
-
-        with open(f"{username}.jpg", 'wb') as f:
-            f.write(img_data)
-
-        print(f"Image for {username} downloaded successfully!")
-    else:
-        print(f"Failed to fetch data for {username}")
-
+	if response.status_code == 200:
+		try:
+			data = json.loads(response.text)
+			image_url = data['image']['link']
+			img_data = requests.get(image_url).content
+			with open(f"{username}.jpg", 'wb') as f:
+				f.write(img_data)
+			print(f"Image for {username} downloaded successfully!")
+		except json.JSONDecodeError:
+			print(f"[{username}] Response is not valid JSON — probably HTML. Skipping.")
+		except KeyError:
+			print(f"[{username}] JSON doesn't contain expected image link.")
+	else:
+		print(f"[{username}] Failed to fetch profile: status code {response.status_code")}
