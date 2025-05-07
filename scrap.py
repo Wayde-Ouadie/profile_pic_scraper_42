@@ -1,6 +1,7 @@
 import requests
 import json
 import sys
+import os
 
 if (len(sys.argv) < 2:
    print("Usage: python3 scrap.py <_intra_42_session_production>")
@@ -20,6 +21,9 @@ cookies = {
 	"_intra_42_session_production": session_token
 }
 
+folder = "Images"
+os.makedirs(folder, exist_ok=True)
+
 for username in usernames:
 	url = f"https://profile.intra.42.fr/users/{username}"
 	response = requests.get(url, cookies=cookies, allow_redirects=True)
@@ -29,7 +33,8 @@ for username in usernames:
 			data = json.loads(response.text)
 			image_url = data['image']['link']
 			img_data = requests.get(image_url).content
-			with open(f"{username}.jpg", 'wb') as f:
+			path = os.path.join(folder, f"{username}.jpg")
+			with open(path, 'wb') as f:
 				f.write(img_data)
 			print(f"Image for {username} downloaded successfully!")
 		except json.JSONDecodeError:
