@@ -10,7 +10,7 @@ if len(sys.argv) < 2:
 session_token = sys.argv[1]
 
 usernames = [
- "oel-feng"
+ "oel-feng", "alaassir", "tamounir"
 ]
 
 cookies = {
